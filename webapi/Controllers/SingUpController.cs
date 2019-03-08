@@ -1,19 +1,14 @@
+using Domain.Authorize;
 using Domain.Models.Entities;
 using Domain.SecurityHash;
+using Domain.TokenGenerator;
 using Infra.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Security.Principal;
 
 namespace webapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class SingUpController : Controller
     {
         private readonly UsuarioRepository _usuarioRepository;
@@ -51,7 +46,7 @@ namespace webapi.Controllers
                 var obj = _usuarioRepository.Add(usuario);
 
                 _usuario.AdicionarTelefone(obj, usuario);
-                usuario.Token = GerarToken(obj, tokenConfigurations, signingConfigurations);
+                usuario.Token = TokenGenerator.GetToken(obj, tokenConfigurations, signingConfigurations);
 
                 _usuarioRepository.SaveChanges();
 
@@ -59,47 +54,7 @@ namespace webapi.Controllers
                 return Created("", obj);
             }
             else
-            {
-                var naoAutorizado = new ObjectResult(new { statusCode = 401, message = "Não autorizado!" }) 
-                {
-                    StatusCode = 401
-                };
-
-                return naoAutorizado;
-            }
-          
-
-        }
- 
-
-        private string GerarToken(Usuario usuario, TokenConfiguration tokenConfigurations, SigningConfigurations signingConfigurations)
-        {
-
-            ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(usuario.Nome, "Login"),
-                new[] {
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                        new Claim(JwtRegisteredClaimNames.UniqueName, usuario.Nome)
-                }
-            );
-
-            DateTime dataCriacao = DateTime.Now;
-            DateTime dataExpiracao = dataCriacao +
-                TimeSpan.FromSeconds(tokenConfigurations.Seconds);
-
-            var handler = new JwtSecurityTokenHandler();
-            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
-            {
-                Issuer = tokenConfigurations.Issuer,
-                Audience = tokenConfigurations.Audience,
-                SigningCredentials = signingConfigurations.SigningCredentials,
-                Subject = identity,
-                NotBefore = dataCriacao,
-                Expires = dataExpiracao
-            });
-            var token = handler.WriteToken(securityToken);
-
-            return token;
+               return NoAuthorize.DenyAccess();
 
         }
 

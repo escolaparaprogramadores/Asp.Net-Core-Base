@@ -29,8 +29,8 @@ namespace webapi
             options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
             services.AddTransient<UsuarioRepository, UsuarioRepository>();
-            services.AddTransient<Usuario, Usuario>();
-
+            services.AddTransient<Usuario, Usuario>(); 
+            services.AddTransient<Middleware, Middleware>();
 
             services.AddSwaggerGen(x =>
             {
@@ -73,7 +73,7 @@ namespace webapi
             // a recursos deste projeto
             services.AddAuthorization(auth =>
             {
-                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                     auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .RequireAuthenticatedUser().Build());
             });

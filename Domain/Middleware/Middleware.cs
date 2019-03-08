@@ -22,8 +22,12 @@ namespace webapi
 
             if (httpContext.Response.StatusCode == 404)
                 await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(new { statusCode = 404, message = "Método não encontrado" }));
-            
+            if (!httpContext.Request.Headers.Keys.Contains("Authorization") && httpContext.Response.StatusCode == 401)
+                await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(new { statusCode = 401, message = "Não Autorizado" }));
+                        
         }
+
+        
 
     }
 }
@@ -34,3 +38,20 @@ namespace webapi
             return builder.UseMiddleware<Middleware>();
         }
     }
+
+public static class TokenCapture
+{
+    public static string CapturarToken(HttpContext httpContext)
+    {
+        string token = string.Empty;
+        foreach (var item in httpContext.Request.Headers)
+        {
+            if (item.Key == "Authorization")
+            {
+                token = item.Value.ToString().Replace("Bearer", "").Trim();
+            }
+        }
+
+        return token;
+    }
+}

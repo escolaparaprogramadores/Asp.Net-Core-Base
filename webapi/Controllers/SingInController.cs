@@ -1,15 +1,16 @@
 
+using Domain.Authorize;
 using Domain.Models.Entities;
 using Domain.SecurityHash;
+using Domain.TokenGenerator;
 using Infra.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Security.Cryptography;
 
 namespace webapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class SingInController : Controller
     {
         private readonly UsuarioRepository _usuarioRepository;
@@ -18,7 +19,9 @@ namespace webapi.Controllers
 
 
         [HttpPost]
-        public object Post([FromBody]Usuario usuario)
+        public object Post([FromBody]Usuario usuario,
+            [FromServices]SigningConfigurations signingConfigurations,
+            [FromServices]TokenConfiguration tokenConfigurations)
         {
             Usuario usuarioBase;
 
@@ -30,35 +33,18 @@ namespace webapi.Controllers
 
                 usuarioBase = _usuarioRepository.GetUserByEmail(usuario.Email);
                 if (usuarioBase == null)
-                {
-                    var naoAutorizado = new ObjectResult(new { statusCode = 401, message = "Usuário e/ou senha inválidos!" })
-                    {
-                        StatusCode = 401
-                    };
-                    return naoAutorizado;
-                }
+                    return NoAuthorize.DenyAccess();
                 if (usuario.Email == usuarioBase.Email && senhaCriptografada != usuarioBase.Senha)
-                {
-                    var naoAutorizado = new ObjectResult(new { statusCode = 401, message = "Usuário e/ou senha inválidos!" })
-                    {
-                        StatusCode = 401
-                    };
-                    return naoAutorizado;
-                }          
+                    return NoAuthorize.DenyAccess();
             }
             else
-            {
-                var naoAutorizado = new ObjectResult(new { statusCode = 401, message = "Usuário e/ou senha inválidos!" })
-                {
-                    StatusCode = 401 
-                };
-                return naoAutorizado;
-            }
+                return NoAuthorize.DenyAccess();
 
-
+                usuarioBase.Token = TokenGenerator.GetToken (usuarioBase, tokenConfigurations, signingConfigurations);
                 usuarioBase.DataUltimoLogin = DateTime.Now.ToLocalTime();
                 _usuarioRepository.Update(usuarioBase);
                 return Ok(usuarioBase);
         }
+
     }
 }
