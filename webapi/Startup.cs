@@ -24,23 +24,18 @@ namespace webapi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Configurando o uso da classe de contexto para
-            // acesso às tabelas do ASP.NET Identity Core
+
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
             services.AddTransient<UsuarioRepository, UsuarioRepository>();
+            services.AddTransient<Usuario, Usuario>();
 
-            //Documentação Swagger
+
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Desafio", Version = "4.0.1" });
+                x.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Desafio Concrete", Version = "4.0.1" });
             });
-
-
-
-
-
 
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
@@ -50,11 +45,6 @@ namespace webapi
                 Configuration.GetSection("TokenConfiguration"))
                     .Configure(tokenConfigurations);
             services.AddSingleton(tokenConfigurations);
-
-            //Implementação Repository Pattern
-            //  services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            //  services.AddScoped<EmpresaRepository>();
-            //  services.AddScoped<UsuarioRepository>();
 
             services.AddAuthentication(authOptions =>
             {
@@ -89,12 +79,12 @@ namespace webapi
             });
             services.AddCors();
             services.AddMvc();
-                   
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
             ApplicationDbContext context)
-           
+
         {
             app.UseMiddleware();
             if (env.IsDevelopment())

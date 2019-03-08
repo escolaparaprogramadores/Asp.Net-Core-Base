@@ -2,6 +2,7 @@
 using Infra.EntityConfiguration;
 using Infra.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,14 +15,20 @@ namespace Infra.Repositories
           => _contex = contex;
 
 
-        public Usuario GetUserByName(string Nome)
-           => (from u in _contex.Usuario
-               select new { u }).Where(x => x.u.Nome == Nome).Select(x => x.u).FirstOrDefault();
+        public Usuario GetUserByEmail(string Email)
+          => (from u in _contex.Usuario
+              .Include(u => u.Telefones).AsNoTracking()
+              select new { u }).Where(x => x.u.Email == Email).Select(x => x.u).FirstOrDefault();
 
         public List<Usuario> GetAllUsers()
-        => (from u in _contex.Usuario
-           .Include(u => u.Telefones)
-            select new { u }).Select(x => x.u).ToList();
+          => (from u in _contex.Usuario
+                .Include(u => u.Telefones).AsNoTracking()
+                select new { u }).Select(x => x.u).ToList();
+
+        public bool ValidarEmail(string Email)
+            => (from u in _contex.Usuario
+                select new { u }).AsNoTracking().Where(x => x.u.Email == Email).Select(x => x.u != null ? true : false).FirstOrDefault();
+
 
     }
 }

@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra", "Infra\Infra.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "webapi", "webapi\webapi.csproj", "{74760450-2080-4E6B-9735-164B44CB5FC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio.Teste", "Desafio.Teste\Desafio.Teste.csproj", "{C1D52249-3B5E-4AEB-9C58-9A46DA753BDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{74760450-2080-4E6B-9735-164B44CB5FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74760450-2080-4E6B-9735-164B44CB5FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74760450-2080-4E6B-9735-164B44CB5FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1D52249-3B5E-4AEB-9C58-9A46DA753BDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1D52249-3B5E-4AEB-9C58-9A46DA753BDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1D52249-3B5E-4AEB-9C58-9A46DA753BDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1D52249-3B5E-4AEB-9C58-9A46DA753BDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
