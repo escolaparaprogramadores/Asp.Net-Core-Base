@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using Infra.EntityConfiguration;
 using Infra.Repositories;
 using Domain.Models.Entities;
+using Infra.RepositoriesADO;
+
 namespace webapi
 {
     public class Startup
@@ -30,7 +32,7 @@ namespace webapi
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
             services.AddTransient<UsuarioRepository, UsuarioRepository>();
             services.AddTransient<Usuario, Usuario>(); 
-            services.AddTransient<Middleware, Middleware>();
+            services.AddTransient<UsuarioRepositoryADO, UsuarioRepositoryADO>();
 
             services.AddSwaggerGen(x =>
             {

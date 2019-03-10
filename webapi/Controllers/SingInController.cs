@@ -15,7 +15,7 @@ namespace webapi.Controllers
     {
         private readonly UsuarioRepository _usuarioRepository;
         public SingInController(UsuarioRepository usuarioRepository) => _usuarioRepository = usuarioRepository;
-   
+
 
 
         [HttpPost]
@@ -29,7 +29,7 @@ namespace webapi.Controllers
             {
                 var senhaCriptografada = string.Empty;
                 senhaCriptografada = new Hash(new SHA512Managed()).CriptografarSenha(usuario.Senha);
-                usuario.Senha = senhaCriptografada;               
+                usuario.Senha = senhaCriptografada;
 
                 usuarioBase = _usuarioRepository.GetUserByEmail(usuario.Email);
                 if (usuarioBase == null)
@@ -40,10 +40,10 @@ namespace webapi.Controllers
             else
                 return NoAuthorize.DenyAccess();
 
-                usuarioBase.Token = TokenGenerator.GetToken (usuarioBase, tokenConfigurations, signingConfigurations);
-                usuarioBase.DataUltimoLogin = DateTime.Now.ToLocalTime();
-                _usuarioRepository.Update(usuarioBase);
-                return Ok(usuarioBase);
+            usuarioBase.Token = TokenGenerator.GetToken(usuarioBase, tokenConfigurations, signingConfigurations);
+            usuarioBase.DataUltimoLogin = DateTime.Now.ToLocalTime();
+            _usuarioRepository.Update(usuarioBase);
+            return Ok(usuarioBase);
         }
 
     }

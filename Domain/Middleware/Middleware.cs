@@ -22,8 +22,8 @@ namespace webapi
 
             if (httpContext.Response.StatusCode == 404)
                 await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(new { statusCode = 404, message = "Método não encontrado" }));
-            if (!httpContext.Request.Headers.Keys.Contains("Authorization") && httpContext.Response.StatusCode == 401)
-                await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(new { statusCode = 401, message = "Não Autorizado" }));
+            //if (!httpContext.Request.Headers.Keys.Contains("Authorization") && httpContext.Response.StatusCode == 401 && httpContext.Request.Method == "GET")
+            //    await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(new { statusCode = 401, message = "Não Autorizado" }));
                         
         }
 

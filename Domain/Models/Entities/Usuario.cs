@@ -7,25 +7,42 @@ namespace Domain.Models.Entities
 {
     public class Usuario 
     {
+
         public Usuario() => UsuarioTelefones = new Collection<UsuarioTelefone>();
 
-        public void GravarDataAtualização() => DataAtualizacao = DateTime.Now.ToLocalTime();
-
-        public void GravarDataUltimoLogin() => DataUltimoLogin = DateTime.Now.ToLocalTime();
-
-        public void GravarDataCriacao() => DataCriacao = DateTime.Now.ToLocalTime();
-
-        public void AdicionarTelefone(Usuario obj, Usuario usuario)
+        public Usuario(Usuario usuario, string senhaCriptografada, string token)
         {
-            foreach (var item in obj.Telefones)
+            Id = Guid.NewGuid();
+            Nome = usuario.Nome;
+            Senha = senhaCriptografada;
+            Email = usuario.Email;
+            Token = token;
+            DataCriacao = AddDataCriacao();
+            DataAtualizacao = AddDataAtualização();
+            DataUltimoLogin = AddDataUltimoLogin();
+            Telefones =  usuario.Telefones;
+            UsuarioTelefones = AdicionarUsuarioTelefone(usuario);
+
+        }
+
+        public DateTime AddDataAtualização() => DataAtualizacao = DateTime.Now.ToLocalTime();
+
+        public DateTime AddDataUltimoLogin() => DataUltimoLogin = DateTime.Now.ToLocalTime();
+
+        public DateTime AddDataCriacao() => DataCriacao = DateTime.Now.ToLocalTime();
+
+        public List<UsuarioTelefone> AdicionarUsuarioTelefone(Usuario usuario)
+        {
+            List<UsuarioTelefone> telefones = new List<UsuarioTelefone>();
+            foreach (var item in usuario.Telefones)
             {
-                UsuarioTelefone usuarioTelefoneModel = new UsuarioTelefone
-                {
-                    UsuarioId = obj.Id,
-                    TelefoneId = item.Id,
-                };
-                usuario.UsuarioTelefones.Add(usuarioTelefoneModel);
+                Telefone telefone = new Telefone(item.Numero, item.Ddd, usuario, usuario.Id);
+                UsuarioTelefone usuarioTelefoneModel = new UsuarioTelefone(Id, telefone.Id);
+                telefones.Add(usuarioTelefoneModel);
             }
+
+            return telefones;
+
         }
 
         public Guid Id { get; set; }

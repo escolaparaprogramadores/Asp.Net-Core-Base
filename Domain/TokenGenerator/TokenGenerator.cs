@@ -13,10 +13,10 @@ namespace Domain.TokenGenerator
         {
 
             ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(usuario.Nome, "Login"),
+                new GenericIdentity(usuario.Email, "Login"),
                 new[] {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                        new Claim(JwtRegisteredClaimNames.UniqueName, usuario.Nome)
+                        new Claim(JwtRegisteredClaimNames.UniqueName, usuario.Email)
                 }
             );
 

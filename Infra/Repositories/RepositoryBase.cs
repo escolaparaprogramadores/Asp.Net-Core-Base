@@ -14,7 +14,8 @@ namespace Infra.Repositories
 
         public TEntity Add(TEntity obj)
         {
-          _contex.Add(obj);
+            _contex.Add(obj);
+            _contex.SaveChanges();
             return obj;
         }
 
@@ -33,8 +34,8 @@ namespace Infra.Repositories
             _contex.SaveChanges();
         }
 
-        public void SaveChanges()
-            => _contex.SaveChanges();
+        //public void SaveChanges()
+        //    => _contex.SaveChanges();
 
         public void Update(TEntity obj)
         {
