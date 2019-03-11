@@ -32,7 +32,7 @@ namespace Infra.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     Numero = table.Column<string>(nullable: true),
                     Ddd = table.Column<string>(nullable: true),
-                    UsuarioId = table.Column<Guid>(nullable: false)
+                    UsuarioId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,7 +42,7 @@ namespace Infra.Migrations
                         column: x => x.UsuarioId,
                         principalTable: "Usuario",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,18 +50,17 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     TelefoneId = table.Column<Guid>(nullable: false),
-                    TelefoneId1 = table.Column<Guid>(nullable: true),
                     UsuarioId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsuarioTelefones", x => x.TelefoneId);
+                    table.PrimaryKey("PK_UsuarioTelefones", x => new { x.UsuarioId, x.TelefoneId });
                     table.ForeignKey(
-                        name: "FK_UsuarioTelefones_Telefone_TelefoneId1",
-                        column: x => x.TelefoneId1,
+                        name: "FK_UsuarioTelefones_Telefone_TelefoneId",
+                        column: x => x.TelefoneId,
                         principalTable: "Telefone",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UsuarioTelefones_Usuario_UsuarioId",
                         column: x => x.UsuarioId,
@@ -76,14 +75,9 @@ namespace Infra.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsuarioTelefones_TelefoneId1",
+                name: "IX_UsuarioTelefones_TelefoneId",
                 table: "UsuarioTelefones",
-                column: "TelefoneId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsuarioTelefones_UsuarioId",
-                table: "UsuarioTelefones",
-                column: "UsuarioId");
+                column: "TelefoneId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

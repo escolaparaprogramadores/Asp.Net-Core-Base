@@ -8,7 +8,8 @@ namespace Domain.Models.Entities
     public class Usuario 
     {
 
-        public Usuario() => UsuarioTelefones = new Collection<UsuarioTelefone>();
+        public Usuario() { }
+   
 
         public Usuario(Usuario usuario, string senhaCriptografada, string token)
         {
@@ -20,7 +21,6 @@ namespace Domain.Models.Entities
             DataCriacao = AddDataCriacao();
             DataAtualizacao = AddDataAtualização();
             DataUltimoLogin = AddDataUltimoLogin();
-            Telefones =  usuario.Telefones;
             UsuarioTelefones = AdicionarUsuarioTelefone(usuario);
 
         }
@@ -34,13 +34,15 @@ namespace Domain.Models.Entities
         public List<UsuarioTelefone> AdicionarUsuarioTelefone(Usuario usuario)
         {
             List<UsuarioTelefone> telefones = new List<UsuarioTelefone>();
+            List<Telefone> tels = new List<Telefone>();
             foreach (var item in usuario.Telefones)
             {
-                Telefone telefone = new Telefone(item.Numero, item.Ddd, usuario, usuario.Id);
-                UsuarioTelefone usuarioTelefoneModel = new UsuarioTelefone(Id, telefone.Id);
+                Telefone telefone = new Telefone(item.Numero, item.Ddd);
+                UsuarioTelefone usuarioTelefoneModel = new UsuarioTelefone(Id, item.Id, usuario, telefone);
                 telefones.Add(usuarioTelefoneModel);
+                tels.Add(telefone);
             }
-
+            Telefones = tels;
             return telefones;
 
         }

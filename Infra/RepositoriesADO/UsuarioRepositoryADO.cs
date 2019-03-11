@@ -57,7 +57,7 @@ namespace Infra.RepositoriesADO
             }
         }
 
-        public void AddTelefone(Telefone telefone)
+        public void AddTelefone(Telefone telefone, Guid usuarioId)
         {
             Dictionary<string, object> parametros = new Dictionary<string, object>();
 
@@ -71,13 +71,14 @@ namespace Infra.RepositoriesADO
                     if (telefone !=  null)
                     {
                             comando = string.Empty;
-                            comando = @"insert into [dbo].[Telefone] (Id,Numero,Ddd)
-                                            VALUES(@Id,@Numero,@Ddd)";
-
+                            comando = @"insert into [dbo].[Telefone] (Id,Numero,Ddd,UsuarioId)
+                                            VALUES(@Id,@Numero,@Ddd,@UsuarioId)";
+                        var UsuarioId = usuarioId;
                             parametros.Clear();
                             parametros.Add("@Id", telefone.Id);
                             parametros.Add("@Numero", telefone.Numero);
                             parametros.Add("@Ddd", telefone.Ddd);
+                            parametros.Add("@UsuarioId", UsuarioId);
 
                             adoConexao.ExecuteScalar(comando, parametros);
                     }

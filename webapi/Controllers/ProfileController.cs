@@ -6,7 +6,7 @@ using System;
 
 namespace webapi.Controllers
 {
-
+    [Route("api/v1/[controller]")]
     public class ProfileController : Controller
     {
         private readonly UsuarioRepository _usuarioRepository;
@@ -14,7 +14,7 @@ namespace webapi.Controllers
 
 
      
-        [HttpGet("api/v1/[controller]/{id}")]
+        [HttpGet("{id}")]
         public object Get(Guid id)
         {
             var usuario = _usuarioRepository.GetUserById(id);

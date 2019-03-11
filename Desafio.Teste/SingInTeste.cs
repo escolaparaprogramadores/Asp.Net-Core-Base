@@ -17,26 +17,7 @@ namespace Desafio.Teste
     public class SingInTeste : Controller
     {
 
-        private readonly UsuarioRepository _usuarioRepository;
-        private readonly UsuarioRepositoryADO _usuarioRepositoryADO;
-        public SingInTeste(UsuarioRepository usuarioRepository, UsuarioRepositoryADO usuarioRepositoryADO)
-        {
-            _usuarioRepository = usuarioRepository;
-            _usuarioRepositoryADO = usuarioRepositoryADO;
-        }
-
-      
-
-
-         [TestMethod]
-        [TestCategory("Usuario")]
-        public void TestMethod1()
-        {
-     
-            
-
-                Assert.AreEqual("", "");
-            }
+    
             
                
         

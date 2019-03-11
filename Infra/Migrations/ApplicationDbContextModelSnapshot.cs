@@ -28,7 +28,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Numero");
 
-                    b.Property<Guid>("UsuarioId");
+                    b.Property<Guid?>("UsuarioId");
 
                     b.HasKey("Id");
 
@@ -63,35 +63,30 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Models.Entities.UsuarioTelefone", b =>
                 {
-                    b.Property<Guid>("TelefoneId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid?>("TelefoneId1");
-
                     b.Property<Guid>("UsuarioId");
 
-                    b.HasKey("TelefoneId");
+                    b.Property<Guid>("TelefoneId");
 
-                    b.HasIndex("TelefoneId1");
+                    b.HasKey("UsuarioId", "TelefoneId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("TelefoneId");
 
                     b.ToTable("UsuarioTelefones");
                 });
 
             modelBuilder.Entity("Domain.Models.Entities.Telefone", b =>
                 {
-                    b.HasOne("Domain.Models.Entities.Usuario", "Usuario")
+                    b.HasOne("Domain.Models.Entities.Usuario")
                         .WithMany("Telefones")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UsuarioId");
                 });
 
             modelBuilder.Entity("Domain.Models.Entities.UsuarioTelefone", b =>
                 {
                     b.HasOne("Domain.Models.Entities.Telefone", "Telefone")
                         .WithMany()
-                        .HasForeignKey("TelefoneId1");
+                        .HasForeignKey("TelefoneId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.Models.Entities.Usuario", "Usuario")
                         .WithMany("UsuarioTelefones")

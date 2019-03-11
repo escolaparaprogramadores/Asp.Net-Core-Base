@@ -12,6 +12,7 @@ using Infra.EntityConfiguration;
 using Infra.Repositories;
 using Domain.Models.Entities;
 using Infra.RepositoriesADO;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace webapi
 {
@@ -36,7 +37,7 @@ namespace webapi
 
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Desafio Concrete", Version = "4.0.1" });
+                x.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Desafio", Version = "4.0.1" });
             });
 
             var signingConfigurations = new SigningConfigurations();
@@ -105,12 +106,14 @@ namespace webapi
             app.UseStaticFiles();
             app.UseMvc();
 
+          
             //Documentação Swagger
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Desafio");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "Desafio Concrete"); });
+       
+            var option = new RewriteOptions();
+            option.AddRedirect("^$", "swagger");
+            app.UseRewriter(option);
 
         }
     }

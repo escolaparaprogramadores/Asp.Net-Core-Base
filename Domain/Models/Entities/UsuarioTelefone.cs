@@ -6,10 +6,12 @@ namespace Domain.Models.Entities
     {
         public UsuarioTelefone() { }
 
-        public UsuarioTelefone(Guid usuarioId, Guid telefoneId)
+        public UsuarioTelefone(Guid usuarioId, Guid telefoneId, Usuario usuario, Telefone telefone)
         {
             UsuarioId = usuarioId;
             TelefoneId = telefoneId;
+            Usuario = usuario;
+            Telefone = telefone;
         }
 
         public Guid TelefoneId { get; set; }

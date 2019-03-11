@@ -9,10 +9,10 @@ namespace Infra.EntityConfiguration.Mapping
      {
         public void Configure(EntityTypeBuilder<Telefone> builder)
         {         
-                 {
-                    builder.ToTable("Telefone");   
-                        
-                 }
+            {
+              builder.ToTable("Telefone");
+
+            }
     
         }
         

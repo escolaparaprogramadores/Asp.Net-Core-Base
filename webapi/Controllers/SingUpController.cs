@@ -54,10 +54,10 @@ namespace webapi.Controllers
 
                 foreach (var item in usuario.Telefones)
                 {
-                    Telefone telefone = new Telefone(item.Numero, item.Ddd, obj, obj.Id);
-                    _usuarioRepositoryADO.AddTelefone(telefone);
+                    Telefone telefone = new Telefone(item.Numero, item.Ddd);
+                    _usuarioRepositoryADO.AddTelefone(telefone, obj.Id);
 
-                    UsuarioTelefone usuarioTelefone = new UsuarioTelefone(obj.Id, telefone.Id);
+                    UsuarioTelefone usuarioTelefone = new UsuarioTelefone(obj.Id, telefone.Id, usuario, telefone);
                     _usuarioRepositoryADO.AddTelefoneUsuario(usuarioTelefone);
                 }
 
